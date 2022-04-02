@@ -3,9 +3,6 @@ pipeline {
     triggers {
         cron('*/2 * * * *')
     }
-	parameters { 
-		string(name: 'DEPLOY_ENV', defaultValue: 'dev', description: '') 
-	}
     stages {
         stage('SCA') {
             steps {
@@ -37,7 +34,7 @@ pipeline {
         }
         stage('Deploy to Minikube') {
             steps {
-                echo "Steps to deploy application to ${params.DEPLOY_ENV} minikube cluster"
+                echo "Steps to deploy application to ${BRANCH_NAME} minikube cluster"
             }
         }		
     }
