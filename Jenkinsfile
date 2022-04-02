@@ -1,11 +1,6 @@
 pipeline {
     agent any
-    triggers {
-        cron('*/2 * * * *')
-    }
-	parameters { 
-		string(name: 'DEPLOY_ENV', defaultValue: 'dev', description: '') 
-	}
+
     stages {
         stage('SCA') {
             steps {
@@ -35,9 +30,28 @@ pipeline {
                 echo 'Steps to Scan Docker Image'
             }
         }
-        stage('Deploy to Minikube') {
+        stage('Deploy to Dev Cluster') {
+			when {
+                branch 'dev'
+            }
             steps {
-                echo "Steps to deploy application to ${params.DEPLOY_ENV} minikube cluster"
+                echo "Steps to deploy application to ${BRANCH_NAME} minikube cluster"
+            }
+        }		
+        stage('Deploy to Staging Cluster') {
+			when {
+                branch 'staging'
+            }
+            steps {
+                echo "Steps to deploy application to ${BRANCH_NAME} minikube cluster"
+            }
+        }
+        stage('Deploy to Prodction Cluster') {
+			when {
+                branch 'main'
+            }
+            steps {
+                echo "Steps to deploy application to ${BRANCH_NAME} minikube cluster"
             }
         }		
     }
